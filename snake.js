@@ -1,11 +1,13 @@
 
 // make iffe
 (() => {
-    const colNum = 20;
+    const colNum = 24;
     const gridContainer = document.querySelector('.grid-container');
     const startBtn = document.querySelector('.start-btn');
     const endBtn = document.querySelector('.end-btn');
     const resetHighScoreBtn = document.querySelector('.reset-high-score-btn');
+    const speedSlider = document.querySelector('.speed-slider');
+    const speedText = document.querySelector('.speed-text');
     const scoreText = document.querySelector('.score');
     const highScoreText = document.querySelector('.high-score');
     const snakeBodyArr = [];
@@ -25,7 +27,7 @@
     let nextDirection = ''
     let currentDirection = '';
     let snakeLength = 1;
-    let speed = 10;
+    let speed = 5;
     let appleCell = null;
     let isCreateApple = true;
     let speedBoost = 1;
@@ -79,6 +81,11 @@
         }
     });
 
+    speedSlider.addEventListener('input', (e) => {
+        speed = e.target.value;
+        speedText.textContent = speed;
+    });
+
     /************************/
     /*** HELPER FUNCTIONS ***/
     /************************/
@@ -112,10 +119,10 @@
         highScoreText.textContent = '0';
     }
 
-
     /**********************/
     /*** GAME FUNCTIONS ***/
     /**********************/
+    
 
     function createGrid() {
         gridContainer.innerHTML = '';
@@ -273,12 +280,12 @@
         if(!isCreateApple) return;
         const cells = getCells();
         const emptyCells = cells.filter(cell => !snakeBodyArr.includes(cell.dataset.cellId));
-        const randIndex = Math.floor(Math.random() * emptyCells.length)
+        const randIndex = Math.floor(Math.random() * emptyCells.length);
         appleCell = emptyCells[randIndex];
         if (appleCell) {
             appleCell.classList.add('apple');
         }
-        isCreateApple = false
+        isCreateApple = false;
     }
 
     function getAppleEatenStatus() {
@@ -395,6 +402,7 @@
     function startGame() {
         if (isPlaying) return;
         endGame();
+        speedSlider.disabled = true;
         if (!isCreateApple) {
             removeApple();
         }
@@ -461,6 +469,7 @@
 
     function endGame() {
         isPlaying = false;
+        speedSlider.disabled = false;
         currentDirection = '';
     }
 
